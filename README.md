@@ -4,4 +4,4 @@
 ## Características principales
 
 - **Preguntas interactivas**:
-  - Arrastrar y soltar imágenes
+  - Arrastrar y soltar respuestas
