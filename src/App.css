@@ -233,3 +233,6 @@ h3 {
 .save-button:hover {
   background-color: #2255ee;
 }
+.edit-button.pregunta{
+    right: 40px; 
+}
