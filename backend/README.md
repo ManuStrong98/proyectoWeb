@@ -5,11 +5,13 @@ Este es un servidor backend hecho con **Node.js**, **Express** y **TypeScript**,
 
 ## 🚀 Cómo ejecutar el proyecto
 
-### 1. Instalar dependencias
+### 1. Desde el CLI
 
 Desde la carpeta `backend/`, ejecuta:
 
 ```bash
-npm install
-npm run dev
+docker build -t backend-juego .
+docker run -p 3000:3000 backend-juego
 ```
+
+Despues entra desde tu browser a este link `http://localhost:3000/`
