@@ -49,7 +49,8 @@ Un objeto JSON con toda la configuración enviada al servidor.
   "enunciado": "Encuentra la habitación con el número 1337.",
   "habitaciones": [102, 301, 1337, 204, 333, 382, 193, 374, 110, 90],
   "tamañoLista": 10,
-  "numeroObjetivo": 1337
+  "numeroObjetivo": 1337,
+  "numeroDeInicio": 850
 }
 ```
 ### Input del Back
