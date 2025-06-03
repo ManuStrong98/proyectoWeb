@@ -1,11 +1,9 @@
 import express from 'express';
+import juegoRoutesV1 from './routes/juegoRoutesV1';
+
 const app = express();
-const port = 3000;
 
-app.get('/', (req, res) => {
-	res.send('¡Hola, TypeScript Express!');
-});
+app.use(express.json());
+app.use('/api/v1/juegos', juegoRoutesV1);
 
-app.listen(port, () => {
-	console.log(`Servidor escuchando en http://localhost:${port}`);
-});
+export default app;
