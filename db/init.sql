@@ -30,3 +30,16 @@ INSERT INTO juego (
 );
 
 
+CREATE TABLE usuario (
+  id SERIAL PRIMARY KEY,
+  usuario VARCHAR(50) UNIQUE NOT NULL,
+  contraseña VARCHAR(100) NOT NULL,
+  nombre_completo VARCHAR(100),
+  correo VARCHAR(100),
+  creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Usuario de prueba
+INSERT INTO usuario (usuario, contraseña, nombre_completo, correo)
+VALUES ('karla', '1234', 'Karla Example', 'karla@example.com');
+
