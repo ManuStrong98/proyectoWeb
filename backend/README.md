@@ -13,3 +13,13 @@ Desde la carpeta `backend/`, ejecuta:
 npm install
 npm run dev
 ```
+### 2. BD
+```bash
+Nombre de la conexión: prograWeb
+Host: shinkansen.proxy.rlwy.net
+Puerto: 19883
+Base de datos: railway
+Usuario: postgres
+Contraseña: mMlWLHppMhzRnLpxBUAxAUqGcYHTntsq
+
+```
