@@ -1,14 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+import { useState, useRef } from "react"  // ← useRef para la subida de imágenes
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Share2, Play, Shuffle } from "lucide-react"
+import { Share2, Play, Shuffle, Upload, X } from 'lucide-react'  // ← Iconos
 import GameInterface from "@/components/game-interface"
+import Image from "next/image"  // ← Para mostrar imágenes
 
 interface GameConfig {
   enunciado: string
@@ -25,6 +27,8 @@ export default function BinarySearchGameConfig() {
   const [numeroObjetivo, setNumeroObjetivo] = useState(1337)
   const [numeroDeInicio, setNumeroDeInicio] = useState(850)
   const [habitacionesInput, setHabitacionesInput] = useState("102, 301, 1337, 204, 333, 382, 193, 374, 110, 90")
+  const [imagenEnunciado, setImagenEnunciado] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [gameStarted, setGameStarted] = useState(false)
   const [gameConfig, setGameConfig] = useState<GameConfig | null>(null)
 
@@ -32,7 +36,6 @@ export default function BinarySearchGameConfig() {
     const size = Number.parseInt(value) || 0
     setTamañoLista(size)
 
-    // Ajustar la lista de habitaciones si es necesario
     if (size > habitaciones.length) {
       const newRooms = [...habitaciones]
       while (newRooms.length < size) {
@@ -68,6 +71,24 @@ export default function BinarySearchGameConfig() {
     }
     setHabitaciones(newRooms)
     setHabitacionesInput(newRooms.join(", "))
+  }
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setImagenEnunciado(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeImage = () => {
+    setImagenEnunciado(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }
 
   const generateGameConfig = (): GameConfig => {
@@ -112,7 +133,7 @@ export default function BinarySearchGameConfig() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+          <CardHeader className="bg-gradient-to-r from-orange-600 to-indigo-600 text-white">
             <CardTitle className="text-2xl font-bold text-center">Configurador de Juego - Búsqueda Binaria</CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
@@ -128,6 +149,39 @@ export default function BinarySearchGameConfig() {
                 placeholder="Describe el objetivo del juego..."
                 className="min-h-[80px]"
               />
+            </div>
+
+            {/* Subida de Imagen */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Imagen del Enunciado (Opcional)</Label>
+              <div className="flex items-center gap-4">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center"
+                >
+                  <Upload className="w-4 h-4" />
+                  Subir Imagen
+                </Button>
+                {imagenEnunciado && (
+                  <Button type="button" variant="ghost" onClick={removeImage}>
+                    <X className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+              {imagenEnunciado && (
+                <div className="mt-2">
+                  <Image src={imagenEnunciado} alt="Enunciado" width={300} height={200} className="rounded shadow" />
+                </div>
+              )}
             </div>
 
             <Separator />
@@ -190,7 +244,6 @@ export default function BinarySearchGameConfig() {
                   />
                 </div>
 
-                {/* Vista previa de habitaciones */}
                 <div className="space-y-2">
                   <Label>Vista Previa de Habitaciones</Label>
                   <div className="p-3 bg-gray-50 rounded-md max-h-32 overflow-y-auto">
@@ -198,10 +251,10 @@ export default function BinarySearchGameConfig() {
                       {habitaciones.map((room, index) => (
                         <span
                           key={index}
-                          className={`px-2 py-1 rounded text-xs ${
+                          className={`px-2 py-1 text-base font-semibold ${
                             room === numeroObjetivo
-                              ? "bg-green-200 text-green-800 font-bold"
-                              : "bg-blue-100 text-blue-800"
+                              ? "bg-green-500 text-white font-bold"
+                              : "bg-orange-300 text-white-800"
                           }`}
                         >
                           {room}
@@ -216,24 +269,68 @@ export default function BinarySearchGameConfig() {
             <Separator />
 
             {/* Botones de Acción */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button onClick={handleCompartir} variant="outline" size="lg" className="flex-1 max-w-xs">
-                <Share2 className="w-5 h-5 mr-2" />
-                Compartir a tus amigos
-              </Button>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
+              <button onClick={handleCompartir} className="custom-game-button">
+                <div className="button-content">
+                  <Share2 className="w-5 h-5 mr-2" />
+                  Compartir a tus amigos
+                </div>
+              </button>
 
-              <Button
-                onClick={handleResponderAhora}
-                size="lg"
-                className="flex-1 max-w-xs bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Responder Ahora
-              </Button>
+              <button onClick={handleResponderAhora} className="custom-game-button">
+                <div className="button-content">
+                  <Play className="w-5 h-5 mr-2" />
+                  Jugar
+                </div>
+              </button>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      <style jsx>{`
+        .custom-game-button {
+          position: relative;
+          width: 280px;
+          height: 60px;
+          background: linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #FFB84D 100%);
+          border: 4px solid #FFFFFF;
+          border-radius: 35px;
+          cursor: pointer;
+          transition: all 0.1s ease;
+          box-shadow: 0 6px 0 #000000, 0 8px 15px rgba(0, 0, 0, 0.3);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .custom-game-button:hover {
+          transform: translateY(2px);
+          box-shadow: 0 4px 0 #000000, 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-game-button:active {
+          transform: translateY(6px);
+          box-shadow: 0 0px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          color: #FFFFFF;
+          font-size: 18px;
+          font-weight: 700;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 640px) {
+          .custom-game-button {
+            width: 100%;
+            max-width: 320px;
+          }
+        }
+      `}</style>
     </div>
   )
 }

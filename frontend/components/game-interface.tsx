@@ -234,19 +234,20 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
             </div>
           </div>
 
-          <div className="flex justify-between mt-8">
-            <Button onClick={onBack} variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver a la configuración
-            </Button>
+           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
+            <button onClick={onBack} className="custom-game-button">
+              <div className="button-content">
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Volver a la configuración
+              </div>
+            </button>
 
-            <Button
-              onClick={saveAnswer}
-              className={`${gameCompleted ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
-            >
-              <Save className="mr-2 h-4 w-4" />
-              Guardar respuesta
-            </Button>
+            <button onClick={saveAnswer} className="custom-game-button">
+              <div className="button-content">
+                <Save className="w-5 h-5 mr-2" />
+                Guardar respuesta
+              </div>
+            </button>
           </div>
         </div>
       </div>
@@ -254,6 +255,48 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
       <style jsx>{`
         .clip-arrow {
           clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0% 80%);
+        }
+        
+        .custom-game-button {
+          position: relative;
+          width: 280px;
+          height: 60px;
+          background: linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #FFB84D 100%);
+          border: 4px solid #FFFFFF;
+          border-radius: 35px;
+          cursor: pointer;
+          transition: all 0.1s ease;
+          box-shadow: 0 6px 0 #000000, 0 8px 15px rgba(0, 0, 0, 0.3);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .custom-game-button:hover {
+          transform: translateY(2px);
+          box-shadow: 0 4px 0 #000000, 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .custom-game-button:active {
+          transform: translateY(6px);
+          box-shadow: 0 0px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .button-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          color: #FFFFFF;
+          font-size: 18px;
+          font-weight: 700;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (max-width: 640px) {
+          .custom-game-button {
+            width: 100%;
+            max-width: 320px;
+          }
         }
       `}</style>
     </div>
