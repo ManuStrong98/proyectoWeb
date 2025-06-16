@@ -134,7 +134,10 @@ export default function BinarySearchGameConfig() {
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl">
           <CardHeader className="bg-gradient-to-r from-orange-600 to-indigo-600 text-white">
-            <CardTitle className="text-2xl font-bold text-center">Configurador de Juego - Búsqueda Binaria</CardTitle>
+            <CardTitle className="text-center py-4">
+              <div className="penguin-text">Configurador de Juego</div>
+              <div className="penguin-text mt-2">Búsqueda Binaria</div>
+            </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
             {/* Enunciado */}

@@ -151,7 +151,7 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
     <div className="min-h-screen bg-amber-50 p-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-amber-900">Hotel Binario</h1>
+           <h1 className="penguin-text-small">Hotel Binario</h1>
           <div className="text-amber-800">Modo de revisión</div>
         </div>
 

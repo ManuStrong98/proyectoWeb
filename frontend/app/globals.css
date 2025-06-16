@@ -74,3 +74,76 @@
     @apply bg-background text-foreground;
   }
 }
+@layer components {
+  .penguin-text {
+    font-family: "Arial Black", "Helvetica", sans-serif;
+    font-weight: 900;
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, #ff4500, #ff6b35, #ff8c42, #ffb84d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow:
+      2px 2px 0px #cc2900,
+      4px 4px 0px #b22400,
+      6px 6px 0px #991f00,
+      8px 8px 0px #801a00,
+      10px 10px 0px #661500,
+      12px 12px 0px #4d1000,
+      14px 14px 0px #330b00,
+      16px 16px 20px rgba(0, 0, 0, 0.6),
+      18px 18px 25px rgba(0, 0, 0, 0.4);
+    transform: perspective(500px) rotateX(15deg);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+  }
+
+  .penguin-text-small {
+    font-family: "Arial Black", "Helvetica", sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    background: linear-gradient(45deg, #ff4500, #ff6b35, #ff8c42, #ffb84d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow:
+      1px 1px 0px #cc2900,
+      2px 2px 0px #b22400,
+      3px 3px 0px #991f00,
+      4px 4px 0px #801a00,
+      5px 5px 0px #661500,
+      6px 6px 0px #4d1000,
+      7px 7px 0px #330b00,
+      8px 8px 15px rgba(0, 0, 0, 0.6),
+      10px 10px 20px rgba(0, 0, 0, 0.4);
+    transform: perspective(400px) rotateX(12deg);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+  }
+
+  @media (max-width: 768px) {
+    .penguin-text {
+      font-size: 1.8rem;
+      text-shadow:
+        1px 1px 0px #cc2900,
+        2px 2px 0px #b22400,
+        3px 3px 0px #991f00,
+        4px 4px 0px #801a00,
+        5px 5px 0px #661500,
+        6px 6px 0px #4d1000,
+        7px 7px 0px #330b00,
+        8px 8px 15px rgba(0, 0, 0, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .penguin-text-small {
+      font-size: 1.5rem;
+      text-shadow: 1px 1px 0px #cc2900, 2px 2px 0px #b22400, 3px 3px 0px #991f00, 4px 4px 0px #801a00, 5px 5px 15px
+        rgba(0, 0, 0, 0.6);
+    }
+  }
+}
