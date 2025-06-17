@@ -130,7 +130,7 @@ export default function BinarySearchGameConfig() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+ <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-green-900 to-indigo p-4 relative">
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl">
           <CardHeader className="bg-gradient-to-r from-orange-600 to-indigo-600 text-white">

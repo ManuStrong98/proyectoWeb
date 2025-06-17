@@ -148,7 +148,7 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50 p-4 relative">
+   <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-yellow-300 to-green-400 p-4 relative">
       <div className="beaver-watermark-game">
         <svg viewBox="0 0 300 300" className="w-full h-full">
           {/* Swimming Beaver */}
