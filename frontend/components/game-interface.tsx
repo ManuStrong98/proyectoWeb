@@ -148,8 +148,46 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50 p-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-amber-50 p-4 relative">
+      <div className="beaver-watermark-game">
+        <svg viewBox="0 0 300 300" className="w-full h-full">
+          {/* Swimming Beaver */}
+          <ellipse cx="150" cy="170" rx="60" ry="45" fill="#8B4513" stroke="#654321" strokeWidth="2" />
+          <ellipse cx="150" cy="120" rx="40" ry="35" fill="#A0522D" stroke="#654321" strokeWidth="2" />
+
+          {/* Ears */}
+          <ellipse cx="130" cy="95" rx="8" ry="12" fill="#8B4513" />
+          <ellipse cx="170" cy="95" rx="8" ry="12" fill="#8B4513" />
+
+          {/* Eyes */}
+          <circle cx="140" cy="115" r="6" fill="#000" className="beaver-eye" />
+          <circle cx="160" cy="115" r="6" fill="#000" className="beaver-eye" />
+          <circle cx="142" cy="113" r="2" fill="#FFF" />
+          <circle cx="162" cy="113" r="2" fill="#FFF" />
+
+          {/* Nose and mouth */}
+          <ellipse cx="150" cy="125" rx="3" ry="2" fill="#000" />
+          <path d="M 145 130 Q 150 135 155 130" stroke="#000" strokeWidth="1.5" fill="none" />
+
+          {/* Teeth */}
+          <rect x="147" y="128" width="2" height="6" fill="#FFF" />
+          <rect x="151" y="128" width="2" height="6" fill="#FFF" />
+
+          {/* Swimming arms */}
+          <ellipse cx="110" cy="150" rx="12" ry="25" fill="#A0522D" transform="rotate(-20 110 150)" />
+          <ellipse cx="190" cy="150" rx="12" ry="25" fill="#A0522D" transform="rotate(20 190 150)" />
+
+          {/* Tail */}
+          <ellipse cx="210" cy="180" rx="25" ry="15" fill="#654321" className="beaver-tail" />
+          <path d="M 195 175 L 225 175 M 195 180 L 225 180 M 195 185 L 225 185" stroke="#4A4A4A" strokeWidth="1" />
+
+          {/* Water ripples */}
+          <ellipse cx="150" cy="220" rx="80" ry="8" fill="none" stroke="#4A90E2" strokeWidth="2" opacity="0.6" />
+          <ellipse cx="150" cy="225" rx="60" ry="6" fill="none" stroke="#4A90E2" strokeWidth="1.5" opacity="0.4" />
+          <ellipse cx="150" cy="230" rx="40" ry="4" fill="none" stroke="#4A90E2" strokeWidth="1" opacity="0.3" />
+        </svg>
+      </div>
+      <div className="max-w-4xl mx-auto relative z-10">
         <div className="flex justify-between items-center mb-6">
            <h1 className="penguin-text-small">Hotel Binario</h1>
           <div className="text-amber-800">Modo de revisión</div>

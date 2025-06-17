@@ -146,4 +146,111 @@
         rgba(0, 0, 0, 0.6);
     }
   }
+  /* Animated Beaver Watermark */
+  .beaver-watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    opacity: 0.08;
+    z-index: 0;
+    pointer-events: none;
+    animation: beaverFloat 8s ease-in-out infinite;
+  }
+
+  .beaver-watermark-game {
+    position: fixed;
+    top: 60%;
+    right: 10%;
+    transform: translate(50%, -50%);
+    width: 300px;
+    height: 300px;
+    opacity: 0.12;
+    z-index: 0;
+    pointer-events: none;
+    animation: beaverSwim 10s ease-in-out infinite;
+  }
+
+  @keyframes beaverFloat {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) rotate(-2deg) scale(1);
+    }
+    25% {
+      transform: translate(-50%, -55%) rotate(1deg) scale(1.05);
+    }
+    50% {
+      transform: translate(-50%, -45%) rotate(-1deg) scale(0.98);
+    }
+    75% {
+      transform: translate(-50%, -52%) rotate(2deg) scale(1.02);
+    }
+  }
+
+  @keyframes beaverSwim {
+    0%,
+    100% {
+      transform: translate(50%, -50%) rotate(0deg) scale(1);
+    }
+    25% {
+      transform: translate(45%, -55%) rotate(-3deg) scale(1.1);
+    }
+    50% {
+      transform: translate(55%, -45%) rotate(2deg) scale(0.95);
+    }
+    75% {
+      transform: translate(50%, -52%) rotate(-1deg) scale(1.05);
+    }
+  }
+
+  @keyframes tailWag {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(15deg);
+    }
+    75% {
+      transform: rotate(-10deg);
+    }
+  }
+
+  @keyframes eyeBlink {
+    0%,
+    90%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.1);
+    }
+  }
+
+  .beaver-tail {
+    animation: tailWag 3s ease-in-out infinite;
+    transform-origin: 80% 50%;
+  }
+
+  .beaver-eye {
+    animation: eyeBlink 4s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  @media (max-width: 768px) {
+    .beaver-watermark {
+      width: 250px;
+      height: 250px;
+      opacity: 0.05;
+    }
+
+    .beaver-watermark-game {
+      width: 200px;
+      height: 200px;
+      opacity: 0.08;
+      right: 5%;
+    }
+  }
 }
