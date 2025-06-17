@@ -18,6 +18,7 @@ interface GameConfig {
   tamañoLista: number
   numeroObjetivo: number
   numeroDeInicio: number
+  imagenEnunciado?: string //imagen
 }
 
 export default function BinarySearchGameConfig() {
@@ -98,6 +99,7 @@ export default function BinarySearchGameConfig() {
       tamañoLista,
       numeroObjetivo,
       numeroDeInicio,
+      imagenEnunciado: imagenEnunciado || undefined, // imagen
     }
   }
 

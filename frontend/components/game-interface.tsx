@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Save } from "lucide-react"
-
+import Image from "next/image" //imagen
 interface GameConfig {
   enunciado: string
   habitaciones: number[]
   tamañoLista: number
   numeroObjetivo: number
   numeroDeInicio: number
+  imagenEnunciado?: string //imagen
 }
 
 interface GameInterfaceProps {
@@ -206,6 +207,18 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
               {config.enunciado.replace(/\d+/, config.numeroObjetivo.toString())}
               {gameCompleted && ' Haz clic en "Guardar" una vez que lo hayas encontrado.'}
             </p>
+            {/* AÑADIDO: Mostrar imagen del enunciado si existe */}
+            {config.imagenEnunciado && (
+              <div className="mt-4 mb-4">
+                <Image
+                  src={config.imagenEnunciado || "/placeholder.svg"}
+                  alt="Imagen del enunciado"
+                  width={400}
+                  height={200}
+                  className="rounded-lg object-cover max-w-full h-auto"
+                />
+              </div>
+            )}
           </div>
 
           <div className="relative w-full max-w-md mx-auto my-8">
