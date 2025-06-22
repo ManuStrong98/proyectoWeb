@@ -16,14 +16,14 @@ const Login: React.FC = () => {
 
 // Simulación sin validar: redirigir directamente
     localStorage.setItem('token', 'simulado-token')
-    router.push('/juego')
+    router.push('/modo-juego')
     
     try {
       const response = await axios.post('/api/login', { usuario, password })
 
       if (response.data.mensaje === 'Login exitoso') {
         localStorage.setItem('token', response.data.token)
-        router.push('/pantalla-principal')
+        router.push('/modo-juego')
       } else {
         setError('Usuario o contraseña incorrectos')
       }

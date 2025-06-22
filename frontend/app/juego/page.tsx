@@ -139,7 +139,7 @@ export default function BinarySearchGameConfig() {
           <CardHeader className="bg-gradient-to-r from-orange-600 to-indigo-600 text-white">
             <CardTitle className="text-center py-4">
               <div className="penguin-text">Configurador de Juego</div>
-              <div className="penguin-text mt-2">Búsqueda Binaria</div>
+              <div className="penguin-text mt-2">" HOTEL BINARIO "</div>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
