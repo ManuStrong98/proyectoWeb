@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Save } from "lucide-react"
-
+import Image from "next/image" //imagen
 interface GameConfig {
   enunciado: string
   habitaciones: number[]
   tamañoLista: number
   numeroObjetivo: number
   numeroDeInicio: number
+  imagenEnunciado?: string //imagen
 }
 
 interface GameInterfaceProps {
@@ -148,10 +149,48 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50 p-4">
-      <div className="max-w-4xl mx-auto">
+   <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-yellow-300 to-green-400 p-4 relative">
+      <div className="beaver-watermark-game">
+        <svg viewBox="0 0 300 300" className="w-full h-full">
+          {/* Swimming Beaver */}
+          <ellipse cx="150" cy="170" rx="60" ry="45" fill="#8B4513" stroke="#654321" strokeWidth="2" />
+          <ellipse cx="150" cy="120" rx="40" ry="35" fill="#A0522D" stroke="#654321" strokeWidth="2" />
+
+          {/* Ears */}
+          <ellipse cx="130" cy="95" rx="8" ry="12" fill="#8B4513" />
+          <ellipse cx="170" cy="95" rx="8" ry="12" fill="#8B4513" />
+
+          {/* Eyes */}
+          <circle cx="140" cy="115" r="6" fill="#000" className="beaver-eye" />
+          <circle cx="160" cy="115" r="6" fill="#000" className="beaver-eye" />
+          <circle cx="142" cy="113" r="2" fill="#FFF" />
+          <circle cx="162" cy="113" r="2" fill="#FFF" />
+
+          {/* Nose and mouth */}
+          <ellipse cx="150" cy="125" rx="3" ry="2" fill="#000" />
+          <path d="M 145 130 Q 150 135 155 130" stroke="#000" strokeWidth="1.5" fill="none" />
+
+          {/* Teeth */}
+          <rect x="147" y="128" width="2" height="6" fill="#FFF" />
+          <rect x="151" y="128" width="2" height="6" fill="#FFF" />
+
+          {/* Swimming arms */}
+          <ellipse cx="110" cy="150" rx="12" ry="25" fill="#A0522D" transform="rotate(-20 110 150)" />
+          <ellipse cx="190" cy="150" rx="12" ry="25" fill="#A0522D" transform="rotate(20 190 150)" />
+
+          {/* Tail */}
+          <ellipse cx="210" cy="180" rx="25" ry="15" fill="#654321" className="beaver-tail" />
+          <path d="M 195 175 L 225 175 M 195 180 L 225 180 M 195 185 L 225 185" stroke="#4A4A4A" strokeWidth="1" />
+
+          {/* Water ripples */}
+          <ellipse cx="150" cy="220" rx="80" ry="8" fill="none" stroke="#4A90E2" strokeWidth="2" opacity="0.6" />
+          <ellipse cx="150" cy="225" rx="60" ry="6" fill="none" stroke="#4A90E2" strokeWidth="1.5" opacity="0.4" />
+          <ellipse cx="150" cy="230" rx="40" ry="4" fill="none" stroke="#4A90E2" strokeWidth="1" opacity="0.3" />
+        </svg>
+      </div>
+      <div className="max-w-4xl mx-auto relative z-10">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-amber-900">Hotel Binario</h1>
+           <h1 className="penguin-text-small">Hotel Binario</h1>
           <div className="text-amber-800">Modo de revisión</div>
         </div>
 
@@ -168,6 +207,18 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
               {config.enunciado.replace(/\d+/, config.numeroObjetivo.toString())}
               {gameCompleted && ' Haz clic en "Guardar" una vez que lo hayas encontrado.'}
             </p>
+            {/* AÑADIDO: Mostrar imagen del enunciado si existe */}
+            {config.imagenEnunciado && (
+              <div className="mt-4 mb-4">
+                <Image
+                  src={config.imagenEnunciado || "/placeholder.svg"}
+                  alt="Imagen del enunciado"
+                  width={400}
+                  height={200}
+                  className="rounded-lg object-cover max-w-full h-auto"
+                />
+              </div>
+            )}
           </div>
 
           <div className="relative w-full max-w-md mx-auto my-8">
@@ -234,19 +285,20 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
             </div>
           </div>
 
-          <div className="flex justify-between mt-8">
-            <Button onClick={onBack} variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver a la configuración
-            </Button>
+           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
+            <button onClick={onBack} className="custom-game-button">
+              <div className="button-content">
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Volver a la configuración
+              </div>
+            </button>
 
-            <Button
-              onClick={saveAnswer}
-              className={`${gameCompleted ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}`}
-            >
-              <Save className="mr-2 h-4 w-4" />
-              Guardar respuesta
-            </Button>
+            <button onClick={saveAnswer} className="custom-game-button">
+              <div className="button-content">
+                <Save className="w-5 h-5 mr-2" />
+                Guardar respuesta
+              </div>
+            </button>
           </div>
         </div>
       </div>
@@ -254,6 +306,48 @@ export default function GameInterface({ config, onBack }: GameInterfaceProps) {
       <style jsx>{`
         .clip-arrow {
           clip-path: polygon(0% 20%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0% 80%);
+        }
+        
+        .custom-game-button {
+          position: relative;
+          width: 280px;
+          height: 60px;
+          background: linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #FFB84D 100%);
+          border: 4px solid #FFFFFF;
+          border-radius: 35px;
+          cursor: pointer;
+          transition: all 0.1s ease;
+          box-shadow: 0 6px 0 #000000, 0 8px 15px rgba(0, 0, 0, 0.3);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .custom-game-button:hover {
+          transform: translateY(2px);
+          box-shadow: 0 4px 0 #000000, 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .custom-game-button:active {
+          transform: translateY(6px);
+          box-shadow: 0 0px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .button-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          color: #FFFFFF;
+          font-size: 18px;
+          font-weight: 700;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (max-width: 640px) {
+          .custom-game-button {
+            width: 100%;
+            max-width: 320px;
+          }
         }
       `}</style>
     </div>
