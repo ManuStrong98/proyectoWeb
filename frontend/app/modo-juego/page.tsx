@@ -12,7 +12,7 @@ export default function ModoJuegoSelector() {
       <div className="modo-box">
         <h2>Selecciona un juego</h2>
         <button onClick={() => router.push('/juego')}>Hotel Binario</button>
-        <button onClick={() => router.push('/viaje-espacial')}>Viaje Espacial</button>
+        <button onClick={() => router.push('/viaje-espacial')}>Planeta Congelado</button>
       </div>
     </div>
   )
