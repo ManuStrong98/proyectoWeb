@@ -286,7 +286,7 @@ const obtenerImagenTermometro = (temp: number) => {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-4xl font-extrabold text-yellow-300 mb-3 flex items-center justify-center gap-3">
-            🚀 Búsqueda Binaria Galáctica
+            🚀 Exploración Galáctica
             <Target className="w-8 h-8 text-green-400" />
           </h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed whitespace-pre-line">

@@ -179,7 +179,7 @@ export default function ExploracionGalacticaGameConfig() {
         <Card className="shadow-xl border border-indigo-400">
           <CardHeader className="bg-gradient-to-r from-blue-800 to-purple-700 text-white">
             <CardTitle className="text-center py-4 text-2xl">
-              CONFIGURADOR DE JUEGO "EXPLORACIÓN GALÁCTICA" - BÚSQUEDA BINARIA
+              CONFIGURADOR DE JUEGO "EXPLORACIÓN GALÁCTICA"
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
