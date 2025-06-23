@@ -1,4 +1,5 @@
 # Ignorar node_modules de frontend y backend
+backend/package-lock.json
 backend/node_modules/
 frontend/node_modules/
 backend/dist/
