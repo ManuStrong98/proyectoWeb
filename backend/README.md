@@ -139,6 +139,49 @@ curl -X GET http://localhost:3001/auth/v1/juegos/ultimo/1/hotel_binario \
   "tipo_de_juego": "hotel_binario"
 }
 ```
+## 4. Obtener juego público para jugar (sin autenticación)
+
+**Endpoint:** `GET http://localhost:3001/juego/:id/:tipo_de_juego`
+
+**Descripción:** Este endpoint permite acceder a un juego compartido públicamente. No requiere autenticación. Es útil cuando un usuario ha creado un juego y ha compartido un enlace público para que otros puedan jugarlo directamente.
+
+### Parámetros de la ruta
+
+* `:id` — ID del usuario que compartió el juego.
+* `:tipo_de_juego` — Tipo de juego (por ejemplo: `galactico`, `hotel_binario`, etc.).
+
+### Ejemplo con `curl`
+
+```bash
+curl -X GET http://localhost:3001/juego/1/galactico
+```
+
+### Respuesta esperada
+
+```json
+{
+  "id": 4,
+  "enunciado": "Acierta el número secreto",
+  "habitaciones": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "tamanio_lista": 5,
+  "numero_objetivo": 42,
+  "numero_de_inicio": 10,
+  "fecha_creacion": "2025-06-24T02:02:21.401Z",
+  "enlace_publico": "https://miapp.com/juegos/abc123",
+  "enlace_de_imagen": "https://miapp.com/images/juego.png",
+  "tipo_de_juego": "galactico"
+}
+```
+
+### Notas
+
+* Este endpoint está diseñado para funcionar sin autenticación.
 
 ---
 
