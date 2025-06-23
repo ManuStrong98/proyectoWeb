@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
 
-const authJuego = Router();
+const ping = Router();
 
-authJuego.post('/ping', (req: Request, res: Response) => {
+ping.post('/ping', (req: Request, res: Response) => {
   res.json({ message: 'pong', user: req.user });
 });
 
-export default authJuego;
+export default ping;
 

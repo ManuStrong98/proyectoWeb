@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { insertJuego, getUltimoJuego } from '../controllers/juegoController';
 
-const router = Router();
+const juegoRoutesV1: Router = Router();
 
-router.post('/', insertJuego);
-router.get('/ultimo', getUltimoJuego);
+juegoRoutesV1.post('/:id', insertJuego);
+juegoRoutesV1.get('/ultimo/:id/:tipo_de_juego', getUltimoJuego);
 
-export default router;
+export default juegoRoutesV1;
