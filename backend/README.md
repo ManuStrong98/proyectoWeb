@@ -20,6 +20,9 @@ Host: shinkansen.proxy.rlwy.net
 Puerto: 19883
 Base de datos: railway
 Usuario: postgres
-Contraseña: mMlWLHppMhzRnLpxBUAxAUqGcYHTntsq
+password: mMlWLHppMhzRnLpxBUAxAUqGcYHTntsq
 
+# script
+$env:PGPASSWORD="mMlWLHppMhzRnLpxBUAxAUqGcYHTntsq"
+psql -h shinkansen.proxy.rlwy.net -p 19883 -U postgres -d railway
 ```
