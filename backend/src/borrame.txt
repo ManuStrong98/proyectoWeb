@@ -1,0 +1,10 @@
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUwNzA4MzQ5LCJleHAiOjE3NTEzMTMxNDl9.Xmwbn5wOfSgnnVstedx_T1S1EieONR_KJfTkv5YXXXo",
+    "user": {
+        "id": 1,
+        "usuario": "karla",
+        "nombre_completo": "Karla Example",
+        "correo": "karla@example.com",
+        "password": "1234"
+    }
+}
