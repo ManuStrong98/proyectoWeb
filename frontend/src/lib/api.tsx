@@ -6,6 +6,10 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
+export const getJuego = (id: string, tipo_de_juego: string) => {
+  return api.get(`/juego/${id}/${tipo_de_juego}`).then(res => res.data)
+}
+
 
 export default api
 
