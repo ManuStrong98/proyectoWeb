@@ -10,6 +10,7 @@ Aplicación web interactiva basada en una única pregunta, en la que el usuario 
 - [Instalación](#instalación)
 - [Convenciones](#convenciones)
 - [Figma](#figma)
+- [Reporte PDF](#reporte)
 
 ## Introducción
 
@@ -77,3 +78,6 @@ npm start
 
 ## Figma
 https://www.figma.com/design/X1iSWl4HDM2ElcZwX8EO7A/preguntas-interactivas?node-id=0-1&t=SZSHnxwTE02dfNyU-1
+
+## Reporte 
+https://docs.google.com/document/d/161TcLOoy4i1ml3ZQGv1x8ds7TNq3skpvF95jnslCkqc/edit?usp=sharing
