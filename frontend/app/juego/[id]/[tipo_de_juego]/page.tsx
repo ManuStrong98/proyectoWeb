@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getJuego } from '../../../../src/lib/api';
+import GalacticoJuego from '../../components/GalacticoJuego';
+import HotelBinarioJuego from '../../components/HotelBinarioJuego';
 
 type JuegoData = {
   id: number;
@@ -35,7 +37,6 @@ export default function JuegoPage() {
         });
     }
   }, [id, tipo_de_juego]);
-    console.log(juego);
 
   if (error) return <p>Error: {error}</p>;
   if (!juego) return <p>Cargando juego...</p>;
@@ -43,12 +44,14 @@ export default function JuegoPage() {
   return (
     <div>
       <h1>{juego.enunciado}</h1>
-      <p>ID: {juego.id}</p>
-      <p>Tipo: {juego.tipo_de_juego}</p>
-      <p>Habitaciones: {juego.habitaciones.join(', ')}</p>
-      <img src={juego.enlace_de_imagen} alt="Imagen del juego" style={{ width: 300 }} />
-      <pre>{JSON.stringify(juego, null, 2)}</pre>
+      {/* Mostrar componente según el tipo_de_juego */}
+      {juego.tipo_de_juego === 'galactico' ? (
+        <GalacticoJuego juego={juego} />
+      ) : juego.tipo_de_juego == 'hotel_binario' ? (
+        <HotelBinarioJuego juego={juego} />
+      ) : (
+        <p>Tipo de juego no soportado.</p>
+      )}
     </div>
   );
 }
-
