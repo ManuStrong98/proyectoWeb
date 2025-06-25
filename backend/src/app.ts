@@ -1,11 +1,22 @@
 import express from 'express';
+import passport from './config/passport'
+import juegoRoutesV1 from './routes/juegoRoutesV1';
+import authRoutes from './routes/login'
+import ping from './routes/juego'
+import juego from './routes/juegoNoauth'
+import cors from 'cors';
 const app = express();
-const port = 3000;
 
-app.get('/', (req, res) => {
-	res.send('¡Hola, TypeScript Express!');
-});
+app.use(cors())
+app.use(express.json())
 
-app.listen(port, () => {
-	console.log(`Servidor escuchando en http://localhost:${port}`);
-});
+app.use('/v1', authRoutes);
+app.use('/auth',
+	passport.authenticate('jwt', { session: false }), ping);
+
+app.use('/auth/v1/juegos', 
+	passport.authenticate('jwt', { session: false }), juegoRoutesV1);
+// usuario no autenticado podra jugar el juego editado
+app.use('/juego', juego);
+
+export default app;
