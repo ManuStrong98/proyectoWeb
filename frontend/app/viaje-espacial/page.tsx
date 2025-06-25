@@ -78,14 +78,14 @@ export default function ExploracionGalacticaGameConfig() {
 
     // Crear payload con todos los campos requeridos explícitamente
     const juegoPayload = {
-      tipoDeJuego: "exploracion_galactica", // ✅ Cambiar de tipo_de_juego a tipoDeJuego
+      tipoDeJuego: "galactico", // Cambiar de "exploracion_galactica" a "galactico"
       enunciado: enunciado.trim(),
-      habitaciones: planetasValidos, // ✅ Array
-      tamanioLista: Number(tamanioLista), // ✅ Número, no array
+      habitaciones: planetasValidos, // Array de temperaturas de planetas
+      tamanioLista: Number(tamanioLista),
       numeroObjetivo: Number(temperaturaObjetivo),
       numeroDeInicio: Number(temperaturaInicialCalculada),
-      enlacePublico: `https://miapp.com/juegos/${Date.now()}`,
-      enlaceDeImagen: "",
+      enlacePublico: `${window.location.origin}/juego/${userId}/galactico`,
+      enlaceDeImagen: "", // Puedes agregar soporte para imágenes más tarde
     }
 
     // Log detallado para debug
@@ -114,9 +114,7 @@ export default function ExploracionGalacticaGameConfig() {
       })
 
       console.log("Respuesta exitosa:", response.data)
-      alert(
-        `✅ ${response.data.message || "Juego creado exitosamente"}\nID del juego: ${response.data.juegoId || "N/A"}`,
-      )
+      alert(`✅ Juego galáctico guardado exitosamente!`)
     } catch (error: any) {
       console.error("Error completo:", error)
 
@@ -272,7 +270,7 @@ export default function ExploracionGalacticaGameConfig() {
       await handleEnviarAlBackend()
 
       // Luego obtener el último juego creado para este tipo
-      const response = await api.get(`/auth/v1/juegos/ultimo/${userId}/exploracion_galactica`, {
+      const response = await api.get(`/auth/v1/juegos/ultimo/${userId}/galactico`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -289,7 +287,6 @@ export default function ExploracionGalacticaGameConfig() {
         })
       } else {
         navigator.clipboard.writeText(shareUrl)
-        alert(`Link copiado al portapapeles!\n${shareUrl}`)
       }
     } catch (error) {
       console.error("Error al compartir:", error)
