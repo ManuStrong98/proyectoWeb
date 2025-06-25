@@ -1,8 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import GameInterface from '../../../components/game-interface';
 
-type JuegoData = {
+// Tipo que representa el formato de los datos del juego
+interface JuegoData {
   id: number;
   enunciado: string;
   habitaciones: number[];
@@ -10,16 +12,33 @@ type JuegoData = {
   numero_objetivo: number;
   numero_de_inicio: number;
   fecha_creacion: string;
-  enlace_publico: string;
-  enlace_de_imagen: string;
+  enlace_publico: string | null;
+  enlace_de_imagen: string | null;
   tipo_de_juego: string;
-};
+}
 
-export default function HotelBinarioJuego({ juego }: { juego: JuegoData }) {
+export default function HotelBinario({ juego }: { juego: JuegoData }) {
+  const [config, setConfig] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (juego) {
+      setConfig({
+        enunciado: juego.enunciado,
+        habitaciones: juego.habitaciones,
+        tamanioLista: juego.tamanio_lista,
+        numeroObjetivo: juego.numero_objetivo,
+        numeroDeInicio: juego.numero_de_inicio,
+        imagenEnunciado: juego.enlace_de_imagen || undefined,
+      });
+    }
+  }, [juego]);
+
+  if (!config) {
+    return <div className="text-center text-white p-4">Cargando juego...</div>;
+  }
+
   return (
-    <div className="p-4 border border-green-500 rounded-md">
-      <h2>🏨 Juego Hotel Binario</h2>
-      <pre>{JSON.stringify(juego, null, 2)}</pre>
-    </div>
+    <GameInterface config={config} onBack={() => window.history.back()} />
   );
 }
+
