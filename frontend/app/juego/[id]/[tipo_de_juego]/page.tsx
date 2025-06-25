@@ -19,36 +19,48 @@ type JuegoData = {
 
 export default function JuegoPage() {
   const params = useParams();
-  const id = params?.id as string;
+  const userId = params?.id as string; // este es el ID del usuario creador
   const tipo_de_juego = params?.tipo_de_juego as string;
 
   const [juego, setJuego] = useState<JuegoData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (id && tipo_de_juego) {
-      getJuego(id, tipo_de_juego)
-        .then(data => setJuego(data))
+    if (userId && tipo_de_juego) {
+      fetch(`http://localhost:3001/juego/${userId}/${tipo_de_juego}`)
+        .then(async (res) => {
+          if (!res.ok) throw new Error('Juego no encontrado');
+          const data = await res.json();
+          setJuego(data);
+        })
         .catch(err => {
           console.error('Error al obtener juego:', err);
           setError('Juego no encontrado');
         });
     }
-  }, [id, tipo_de_juego]);
-    console.log(juego);
+  }, [userId, tipo_de_juego]);
 
   if (error) return <p>Error: {error}</p>;
   if (!juego) return <p>Cargando juego...</p>;
 
   return (
-    <div>
+    <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h1>{juego.enunciado}</h1>
-      <p>ID: {juego.id}</p>
-      <p>Tipo: {juego.tipo_de_juego}</p>
-      <p>Habitaciones: {juego.habitaciones.join(', ')}</p>
-      <img src={juego.enlace_de_imagen} alt="Imagen del juego" style={{ width: 300 }} />
-      <pre>{JSON.stringify(juego, null, 2)}</pre>
+      <p><strong>ID del juego:</strong> {juego.id}</p>
+      <p><strong>Tipo de juego:</strong> {juego.tipo_de_juego}</p>
+      <p><strong>Habitaciones:</strong> {juego.habitaciones.join(', ')}</p>
+      <p><strong>Número objetivo:</strong> {juego.numero_objetivo}</p>
+      <p><strong>Número de inicio:</strong> {juego.numero_de_inicio}</p>
+      {juego.enlace_de_imagen && (
+        <img
+          src={juego.enlace_de_imagen}
+          alt="Imagen del juego"
+          style={{ width: 300, marginTop: '1rem' }}
+        />
+      )}
+      <pre style={{ marginTop: '1rem' }}>
+        {JSON.stringify(juego, null, 2)}
+      </pre>
     </div>
   );
 }
-

@@ -34,6 +34,7 @@ export default function BinarySearchGameConfig() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [gameStarted, setGameStarted] = useState(false)
   const [gameConfig, setGameConfig] = useState<GameConfig | null>(null)
+ const [lastGameId, setLastGameId] = useState<string | null>(null)
 
   const handleTamañoListaChange = (value: string) => {
     const size = Number.parseInt(value) || 0
@@ -117,20 +118,27 @@ export default function BinarySearchGameConfig() {
     }
   }
 
-  const handleCompartir = () => {
-    const config = generateGameConfig()
-    const configString = encodeURIComponent(JSON.stringify(config))
-    const shareUrl = `${window.location.origin}?config=${configString}`
+ const handleCompartir = () => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const gameId = lastGameId || localStorage.getItem('lastGameId');
+    const tipoDeJuego = "hotel_binario";
+
+    if (!gameId || !user.id) {
+      alert("No hay un juego creado recientemente para compartir.");
+      return;
+    }
+
+    const shareUrl = `${window.location.origin}/juego/${user.id}/${tipoDeJuego}`;
 
     if (navigator.share) {
       navigator.share({
-        title: "Juego de Búsqueda Binaria",
-        text: "Juega este desafío de búsqueda binaria",
+        title: "Juego Hotel Binario",
+        text: "¡Juega este reto de búsqueda binaria!",
         url: shareUrl,
-      })
+      });
     } else {
-      navigator.clipboard.writeText(shareUrl)
-      alert("Link copiado al portapapeles!")
+      navigator.clipboard.writeText(shareUrl);
+      alert(`🔗 Link copiado:\n${shareUrl}`);
     }
   }
 
@@ -152,13 +160,13 @@ export default function BinarySearchGameConfig() {
   }
 
     const juegoPayload = {
-      tipoDeJuego: "hotel_Binario",
+      tipoDeJuego: "hotel_binario",
       enunciado,
       habitaciones,
       tamanioLista: tamañoLista,
       numeroObjetivo,
       numeroDeInicio,
-      enlacePublico: "https://miapp.com/juegos/abc123",
+      enlacePublico: "",
       enlaceDeImagen: imagenEnunciado ?? ""
     };
 
@@ -172,12 +180,17 @@ export default function BinarySearchGameConfig() {
         },
       }
     );
-       alert(`✅ ${response.data.message}\nID del juego: ${response.data.juegoId}`);
-  } catch (error) {
-    console.error("Error al enviar el juego:", error);
-    alert("❌ Error al enviar el juego al servidor.");
+        const enlacePublico = `http://localhost:3000/juego/${response.data.juegoId}/hotel_binario`;
+      localStorage.setItem('lastGameId', response.data.juegoId);
+      setLastGameId(response.data.juegoId);
+      navigator.clipboard.writeText(enlacePublico);
+      alert(`✅ Juego insertado correctamente\n\n📎 Enlace copiado:\n${enlacePublico}`);
+
+    } catch (error) {
+      console.error("Error al enviar el juego:", error);
+      alert("❌ Error al enviar el juego al servidor.");
+    }
   }
-};
 
   if (gameStarted && gameConfig) {
     return <GameInterface config={gameConfig} onBack={() => setGameStarted(false)} />
