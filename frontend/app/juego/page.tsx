@@ -2,16 +2,17 @@
 import Login from '@/components/Login';
 
 import type React from "react"
-import { useState, useRef } from "react"  // ← useRef para la subida de imágenes
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Share2, Play, Shuffle, Upload, X } from 'lucide-react'  // ← Iconos
+import { Share2, Play, Shuffle, Upload, X } from 'lucide-react'
 import GameInterface from "@/components/game-interface"
-import Image from "next/image"  // ← Para mostrar imágenes
+import Image from "next/image"
+import api from '../../src/lib/api'
 
 interface GameConfig {
   enunciado: string
@@ -19,7 +20,7 @@ interface GameConfig {
   tamañoLista: number
   numeroObjetivo: number
   numeroDeInicio: number
-  imagenEnunciado?: string //imagen
+  imagenEnunciado?: string
 }
 
 export default function BinarySearchGameConfig() {
@@ -75,14 +76,26 @@ export default function BinarySearchGameConfig() {
     setHabitacionesInput(newRooms.join(", "))
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setImagenEnunciado(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'manolo');
+    formData.append('cloud_name', 'dqdq05u7f');
+
+    try {
+      const response = await fetch('https://api.cloudinary.com/v1_1/dqdq05u7f/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      setImagenEnunciado(data.secure_url);
+    } catch (error) {
+      console.error('Error al subir la imagen:', error);
+      alert('Hubo un error al subir la imagen.');
     }
   }
 
@@ -100,7 +113,7 @@ export default function BinarySearchGameConfig() {
       tamañoLista,
       numeroObjetivo,
       numeroDeInicio,
-      imagenEnunciado: imagenEnunciado || undefined, // imagen
+      imagenEnunciado: imagenEnunciado || undefined,
     }
   }
 
@@ -128,12 +141,50 @@ export default function BinarySearchGameConfig() {
     setGameStarted(true)
   }
 
+  const handleEnviarAlBackend = async () => {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userId = user.id;
+
+   if (!token || !userId) {
+    alert("⚠️ No se encontró token o ID de usuario. ¿Has iniciado sesión?");
+    return;
+  }
+
+    const juegoPayload = {
+      tipoDeJuego: "hotel_Binario",
+      enunciado,
+      habitaciones,
+      tamanioLista: tamañoLista,
+      numeroObjetivo,
+      numeroDeInicio,
+      enlacePublico: "https://miapp.com/juegos/abc123",
+      enlaceDeImagen: imagenEnunciado ?? ""
+    };
+
+    try {
+    const response = await api.post(
+      `/auth/v1/juegos/${userId}`,
+      juegoPayload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+       alert(`✅ ${response.data.message}\nID del juego: ${response.data.juegoId}`);
+  } catch (error) {
+    console.error("Error al enviar el juego:", error);
+    alert("❌ Error al enviar el juego al servidor.");
+  }
+};
+
   if (gameStarted && gameConfig) {
     return <GameInterface config={gameConfig} onBack={() => setGameStarted(false)} />
   }
 
   return (
- <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-green-900 to-indigo p-4 relative">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-green-900 to-indigo p-4 relative">
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl">
           <CardHeader className="bg-gradient-to-r from-orange-600 to-indigo-600 text-white">
@@ -143,7 +194,6 @@ export default function BinarySearchGameConfig() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
-            {/* Enunciado */}
             <div className="space-y-2">
               <Label htmlFor="enunciado" className="text-lg font-semibold">
                 Enunciado de la Pregunta
@@ -157,7 +207,6 @@ export default function BinarySearchGameConfig() {
               />
             </div>
 
-            {/* Subida de Imagen */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">Imagen del Enunciado (Opcional)</Label>
               <div className="flex items-center gap-4">
@@ -192,11 +241,9 @@ export default function BinarySearchGameConfig() {
 
             <Separator />
 
-            {/* Configuración de Habitaciones */}
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <Label className="text-lg font-semibold">Configuración de Habitaciones</Label>
-
                 <div className="space-y-2">
                   <Label htmlFor="tamano">Tamaño de la Lista</Label>
                   <Input
@@ -208,7 +255,6 @@ export default function BinarySearchGameConfig() {
                     max="50"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="habitaciones">Números de Habitación</Label>
                   <Textarea
@@ -227,7 +273,6 @@ export default function BinarySearchGameConfig() {
 
               <div className="space-y-4">
                 <Label className="text-lg font-semibold">Configuración del Juego</Label>
-
                 <div className="space-y-2">
                   <Label htmlFor="objetivo">Número Objetivo</Label>
                   <Input
@@ -238,7 +283,6 @@ export default function BinarySearchGameConfig() {
                     placeholder="1337"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="inicio">Número de Inicio</Label>
                   <Input
@@ -249,7 +293,6 @@ export default function BinarySearchGameConfig() {
                     placeholder="850"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label>Vista Previa de Habitaciones</Label>
                   <div className="p-3 bg-gray-50 rounded-md max-h-32 overflow-y-auto">
@@ -274,7 +317,6 @@ export default function BinarySearchGameConfig() {
 
             <Separator />
 
-            {/* Botones de Acción */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
               <button onClick={handleCompartir} className="custom-game-button">
                 <div className="button-content">
@@ -282,18 +324,22 @@ export default function BinarySearchGameConfig() {
                   Compartir a tus amigos
                 </div>
               </button>
-
               <button onClick={handleResponderAhora} className="custom-game-button">
                 <div className="button-content">
                   <Play className="w-5 h-5 mr-2" />
                   Jugar
                 </div>
               </button>
+              <button onClick={handleEnviarAlBackend} className="custom-game-button">
+                <div className="button-content">
+                  <Upload className="w-5 h-5 mr-2" />
+                  Enviar al servidor
+                </div>
+              </button>
             </div>
           </CardContent>
         </Card>
       </div>
-
       <style jsx>{`
         .custom-game-button {
           position: relative;
@@ -307,17 +353,14 @@ export default function BinarySearchGameConfig() {
           box-shadow: 0 6px 0 #000000, 0 8px 15px rgba(0, 0, 0, 0.3);
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
         .custom-game-button:hover {
           transform: translateY(2px);
           box-shadow: 0 4px 0 #000000, 0 6px 12px rgba(0, 0, 0, 0.3);
         }
-
         .custom-game-button:active {
           transform: translateY(6px);
           box-shadow: 0 0px 0 #000000, 0 2px 8px rgba(0, 0, 0, 0.3);
         }
-
         .button-content {
           display: flex;
           align-items: center;
@@ -329,7 +372,6 @@ export default function BinarySearchGameConfig() {
           font-weight: 700;
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
-
         @media (max-width: 640px) {
           .custom-game-button {
             width: 100%;
