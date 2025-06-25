@@ -6,7 +6,7 @@ Aplicación web interactiva basada en una única pregunta, en la que el usuario 
 
 * [Introducción General](#introducción-general)
 * [Características principales](#características-principales)
-* [Instalación](#instalación)
+* [✨ Compilar y ejecutar el proyecto](#-compilar-y-ejecutar-el-proyecto)
 * [Tutorial del Juego y Edición](#tutorial-del-juego-y-edición)
 * [Convenciones](#convenciones)
 * [Figma](#figma)
@@ -38,21 +38,61 @@ Ambos juegos comparten la misma mecánica pero con diferentes estéticas.
 * 🔐 **Edición exclusiva para usuarios logueados**.
 * 📂 **Dos juegos disponibles**: Galáctico y Hotel Binario.
 
-## Instalación
+
+---
+
+## ✨ Compilar y ejecutar el proyecto
+### Clonar el repositorio
 
 ```bash
-# Clonar el repositorio
 git clone https://github.com/ManuStrong98/proyectoWeb.git
-
-# Entrar al directorio del proyecto
 cd proyectoWeb
-
-# Instalar dependencias
-npm install
-
-# Iniciar la aplicación en modo desarrollo
-npm start
 ```
+
+### 📂 Frontend
+
+```bash
+cd frontend
+npm install --legacy-peer-deps
+npm run dev
+```
+
+Esto iniciará el cliente en modo desarrollo.
+
+---
+
+### 🚀 Backend
+
+```bash
+cd backend
+npm install --legacy-peer-deps
+npm run dev
+```
+
+Esto iniciará el servidor API.
+
+---
+
+### 📆 Base de Datos
+
+No es necesario levantar una base de datos local, ya que está desplegada remotamente. A continuación se detallan las credenciales por si necesitas conectarte manualmente:
+
+* **Nombre de la conexión:** prograWeb
+* **Host:** `shinkansen.proxy.rlwy.net`
+* **Puerto:** `19883`
+* **Base de datos:** `railway`
+* **Usuario:** `postgres`
+* **Contraseña:** `mMlWLHppMhzRnLpxBUAxAUqGcYHTntsq`
+
+### 🔧 Script de conexión desde consola:
+
+```bash
+$env:PGPASSWORD="mMlWLHppMhzRnLpxBUAxAUqGcYHTntsq"
+psql -h shinkansen.proxy.rlwy.net -p 19883 -U postgres -d railway
+```
+
+---
+
 
 ## Tutorial del Juego y Edición
 
