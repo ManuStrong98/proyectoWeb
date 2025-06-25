@@ -278,16 +278,17 @@ export default function ExploracionGalacticaGameConfig() {
 
       const juegoId = response.data.id
       const shareUrl = `${window.location.origin}/juego/${userId}/galactico`
+      alert(shareUrl)
 
-      if (navigator.share) {
-        navigator.share({
-          title: "Exploración Galáctica - Búsqueda Binaria",
-          text: "Juega esta misión de búsqueda binaria interplanetaria",
-          url: shareUrl,
-        })
-      } else {
-        navigator.clipboard.writeText(shareUrl)
-      }
+      // if (navigator.share) {
+      //   navigator.share({
+      //     title: "Exploración Galáctica - Búsqueda Binaria",
+      //     text: "Juega esta misión de búsqueda binaria interplanetaria",
+      //     url: shareUrl,
+      //   })
+      // } else {
+      //   navigator.clipboard.writeText(shareUrl)
+      // }
     } catch (error) {
       console.error("Error al compartir:", error)
       alert("❌ Error al generar el link de compartir. Asegúrate de haber guardado el juego primero.")
