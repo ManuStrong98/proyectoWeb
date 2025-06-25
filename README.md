@@ -10,6 +10,7 @@ Aplicación web interactiva basada en una única pregunta, en la que el usuario 
 * [Tutorial del Juego y Edición](#tutorial-del-juego-y-edición)
 * [Convenciones](#convenciones)
 * [Figma](#figma)
+* [Reporte Doc](#reporte-doc)
 
 ## Introducción General
 
@@ -139,3 +140,6 @@ Si accedes a un link compartido, podrás jugar directamente sin necesidad de est
 ## Figma
 
 [https://www.figma.com/design/X1iSWl4HDM2ElcZwX8EO7A/preguntas-interactivas?node-id=0-1\&t=SZSHnxwTE02dfNyU-1](https://www.figma.com/design/X1iSWl4HDM2ElcZwX8EO7A/preguntas-interactivas?node-id=0-1&t=SZSHnxwTE02dfNyU-1)
+
+## Reporte Doc
+[https://docs.google.com/document/d/1eSlBajPT5OxdJ6hACmszWsBiwIPVNok_FKkXSUaBVD4/edit?usp=sharing](https://docs.google.com/document/d/1eSlBajPT5OxdJ6hACmszWsBiwIPVNok_FKkXSUaBVD4/edit?usp=sharing)
