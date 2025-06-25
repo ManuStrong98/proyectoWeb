@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Share2, Play, Shuffle } from "lucide-react"
+import { Share2, Play, Shuffle, Upload } from "lucide-react"
 import GalaxiaGameInterface from "@/components/game-galaxia"
+import api from "../../src/lib/api"
 
 interface Nodo {
   value: number
@@ -25,6 +26,124 @@ interface GameConfig {
 }
 
 export default function ExploracionGalacticaGameConfig() {
+  const handleEnviarAlBackend = async () => {
+    const token = localStorage.getItem("token")
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    const userId = user.id
+
+    if (!token || !userId) {
+      alert("⚠️ No se encontró token o ID de usuario. ¿Has iniciado sesión?")
+      return
+    }
+
+    if (!planetas || planetas.length === 0) {
+      alert("⚠️ La lista de planetas está vacía")
+      return
+    }
+
+    // Validar que el objetivo esté en la lista
+    if (!planetas.includes(temperaturaObjetivo)) {
+      alert("⚠️ La temperatura objetivo debe estar en la lista de planetas")
+      return
+    }
+
+    // Calcular temperaturaInicial para evitar enviar 0 o null
+    const arbol = construirBSTBalanceado(planetas)
+    const temperaturaInicialCalculada = arbol?.value || temperaturaObjetivo
+
+    // Asegurar que todos los valores sean válidos y no null
+    const planetasValidos = planetas.filter((p) => typeof p === "number" && !isNaN(p))
+    const tamanioLista = planetasValidos.length
+
+    // Validar que tengamos datos válidos
+    if (tamanioLista === 0) {
+      alert("⚠️ No hay planetas válidos en la lista")
+      return
+    }
+
+    if (!enunciado.trim()) {
+      alert("⚠️ El enunciado no puede estar vacío")
+      return
+    }
+
+    if (!temperaturaObjetivo || isNaN(temperaturaObjetivo)) {
+      alert("⚠️ La temperatura objetivo debe ser un número válido")
+      return
+    }
+
+    if (!temperaturaInicialCalculada || isNaN(temperaturaInicialCalculada)) {
+      alert("⚠️ Error calculando la temperatura inicial")
+      return
+    }
+
+    // Crear payload con todos los campos requeridos explícitamente
+    const juegoPayload = {
+      tipoDeJuego: "exploracion_galactica", // ✅ Cambiar de tipo_de_juego a tipoDeJuego
+      enunciado: enunciado.trim(),
+      habitaciones: planetasValidos, // ✅ Array
+      tamanioLista: Number(tamanioLista), // ✅ Número, no array
+      numeroObjetivo: Number(temperaturaObjetivo),
+      numeroDeInicio: Number(temperaturaInicialCalculada),
+      enlacePublico: `https://miapp.com/juegos/${Date.now()}`,
+      enlaceDeImagen: "",
+    }
+
+    // Log detallado para debug
+    console.log("=== DEBUG PAYLOAD ===")
+    console.log("Planetas originales:", planetas)
+    console.log("Planetas válidos:", planetasValidos)
+    console.log("Tamaño lista:", tamanioLista)
+    console.log("Temperatura objetivo:", temperaturaObjetivo)
+    console.log("Temperatura inicial:", temperaturaInicialCalculada)
+    console.log("Payload completo:", JSON.stringify(juegoPayload, null, 2))
+    console.log("Tipos de datos:")
+    console.log("- tipo_de_juego:", typeof juegoPayload.tipoDeJuego)
+    console.log("- enunciado:", typeof juegoPayload.enunciado)
+    console.log("- habitaciones:", Array.isArray(juegoPayload.habitaciones), juegoPayload.habitaciones.length)
+    console.log("- tamanio_lista:", typeof juegoPayload.tamanioLista, juegoPayload.tamanioLista)
+    console.log("- numero_objetivo:", typeof juegoPayload.numeroObjetivo, juegoPayload.numeroObjetivo)
+    console.log("- numero_de_inicio:", typeof juegoPayload.numeroDeInicio, juegoPayload.numeroDeInicio)
+
+    try {
+      const response = await api.post(`/auth/v1/juegos/${userId}`, juegoPayload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 15000, // 15 segundos timeout
+      })
+
+      console.log("Respuesta exitosa:", response.data)
+      alert(
+        `✅ ${response.data.message || "Juego creado exitosamente"}\nID del juego: ${response.data.juegoId || "N/A"}`,
+      )
+    } catch (error: any) {
+      console.error("Error completo:", error)
+
+      if (error.response) {
+        console.error("Error status:", error.response.status)
+        console.error("Error data:", error.response.data)
+
+        const errorMessage =
+          error.response.data?.message || error.response.data?.error || `Error ${error.response.status}`
+
+        alert(`❌ Error del servidor (${error.response.status}): ${errorMessage}`)
+
+        if (error.response.status === 500) {
+          console.log("🔍 PAYLOAD QUE CAUSÓ EL ERROR 500:")
+          console.log(JSON.stringify(juegoPayload, null, 2))
+          alert(`🔍 Debug info - Revisa la consola para ver el payload enviado`)
+        }
+      } else if (error.request) {
+        console.error("Error request:", error.request)
+        alert("❌ Sin respuesta del servidor. Verifica que el backend esté funcionando.")
+      } else {
+        console.error("Error config:", error.message)
+        alert(`❌ Error en la configuración: ${error.message}`)
+      }
+    }
+  }
+
   const [enunciado, setEnunciado] = useState(
     "Encuentra el planeta con una temperatura exacta de 90°C.\nUsa la búsqueda binaria: compara la temperatura actual con tu objetivo y decide si ir a planetas más fríos (izquierda) o más calientes (derecha).",
   )
@@ -137,20 +256,44 @@ export default function ExploracionGalacticaGameConfig() {
     }
   }
 
-  const handleCompartir = () => {
-    const config = generateGameConfig()
-    const configString = encodeURIComponent(JSON.stringify(config))
-    const shareUrl = `${window.location.origin}?config=${configString}`
+  const handleCompartir = async () => {
+    // Primero enviar al backend para obtener el ID del juego
+    const token = localStorage.getItem("token")
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    const userId = user.id
 
-    if (navigator.share) {
-      navigator.share({
-        title: "Exploración Galáctica - Búsqueda Binaria",
-        text: "Juega esta misión de búsqueda binaria interplanetaria",
-        url: shareUrl,
+    if (!token || !userId) {
+      alert("⚠️ Debes guardar el juego primero antes de compartirlo")
+      return
+    }
+
+    try {
+      // Enviar el juego al backend primero
+      await handleEnviarAlBackend()
+
+      // Luego obtener el último juego creado para este tipo
+      const response = await api.get(`/auth/v1/juegos/ultimo/${userId}/exploracion_galactica`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-    } else {
-      navigator.clipboard.writeText(shareUrl)
-      alert("Link copiado al portapapeles!")
+
+      const juegoId = response.data.id
+      const shareUrl = `${window.location.origin}/juego/${userId}/galactico`
+
+      if (navigator.share) {
+        navigator.share({
+          title: "Exploración Galáctica - Búsqueda Binaria",
+          text: "Juega esta misión de búsqueda binaria interplanetaria",
+          url: shareUrl,
+        })
+      } else {
+        navigator.clipboard.writeText(shareUrl)
+        alert(`Link copiado al portapapeles!\n${shareUrl}`)
+      }
+    } catch (error) {
+      console.error("Error al compartir:", error)
+      alert("❌ Error al generar el link de compartir. Asegúrate de haber guardado el juego primero.")
     }
   }
 
@@ -178,9 +321,7 @@ export default function ExploracionGalacticaGameConfig() {
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-xl border border-indigo-400">
           <CardHeader className="bg-gradient-to-r from-blue-800 to-purple-700 text-white">
-            <CardTitle className="text-center py-4 text-2xl">
-              CONFIGURADOR DE JUEGO "EXPLORACIÓN GALÁCTICA"
-            </CardTitle>
+            <CardTitle className="text-center py-4 text-2xl">CONFIGURADOR DE JUEGO "EXPLORACIÓN GALÁCTICA"</CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
             <div className="space-y-2">
@@ -304,6 +445,11 @@ export default function ExploracionGalacticaGameConfig() {
               <button onClick={handleIniciarMision} className="custom-game-button">
                 <div className="button-content">
                   <Play className="w-5 h-5 mr-2" /> Iniciar búsqueda binaria
+                </div>
+              </button>
+              <button onClick={handleEnviarAlBackend} className="custom-game-button">
+                <div className="button-content">
+                  <Upload className="w-5 h-5 mr-2" /> Enviar al servidor
                 </div>
               </button>
             </div>
